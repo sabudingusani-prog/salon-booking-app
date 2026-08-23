@@ -174,9 +174,74 @@ async function saveSalon() {
     return;
   }
 
-  message.style.color = "#7ee787";
-  message.textContent = "✅ Podaci salona su async function addService() {
-  const message = document.getElementById("serviceMessage");
+      message.style.color = "#7ee787";
+    message.textContent = "✅ Podaci salona su spremljeni.";
+}
+
+async function addService() {
+    const message = document.getElementById("serviceMessage");
+
+    const name = document.getElementById("serviceName").value.trim();
+    const price = parseFloat(document.getElementById("servicePrice").value);
+    const duration = parseInt(document.getElementById("serviceDuration").value);
+
+    if (!name || isNaN(price) || isNaN(duration)) {
+        message.style.color = "#ff7373";
+        message.textContent = "Popunite sva polja za uslugu.";
+        return;
+    }
+
+    const { data: { user }, error: userError } =
+        await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+        message.style.color = "#ff7373";
+        message.textContent = "Morate biti prijavljeni.";
+        return;
+    }
+
+    const { data: salon, error: salonError } = await supabaseClient
+        .from("salons")
+        .select("id")
+        .eq("owner_id", user.id)
+        .maybeSingle();
+
+    if (salonError || !salon) {
+        message.style.color = "#ff7373";
+        message.textContent = "Prvo spremite podatke salona.";
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("services")
+        .insert({
+            salon_id: salon.id,
+            name: name,
+            price: price,
+            duration_minutes: duration
+        });
+
+    if (error) {
+        message.style.color = "#ff7373";
+        message.textContent = "Greška: " + error.message;
+        return;
+    }
+
+    message.style.color = "#7ee787";
+    message.textContent = "✅ Usluga je dodana.";
+
+    document.getElementById("serviceName").value = "";
+    document.getElementById("servicePrice").value = "";
+    document.getElementById("serviceDuration").value = "";
+}
+
+</script>
+</body>
+</html>
+}
+  message.textContent = "✅ Podaci salona su async function }
+async function addService() {
+    const message = document.getElementById("serviceMessage");
 
   const name = document.getElementById("serviceName").value.trim();
   const price = parseFloat(document.getElementById("servicePrice").value);
