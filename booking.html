@@ -6,57 +6,139 @@
 <title>TERMINO | Rezervacija</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+box-sizing:border-box;
+}
+
 body{
-margin:0;background:#0b0b0b;color:#fff;
-font-family:Arial,sans-serif;padding:20px
+margin:0;
+background:#0b0b0b;
+color:#fff;
+font-family:Arial,sans-serif;
+padding:20px;
 }
-.wrap{max-width:720px;margin:20px auto}
-.logo{color:#d8ad55;font-size:40px;font-weight:900}
+
+.wrap{
+max-width:720px;
+margin:20px auto;
+}
+
+.logo{
+color:#d8ad55;
+font-size:40px;
+font-weight:900;
+}
+
 .card{
-background:#151515;border:1px solid #333;
-border-radius:20px;padding:20px;margin:16px 0
+background:#151515;
+border:1px solid #333;
+border-radius:20px;
+padding:20px;
+margin:16px 0;
 }
-label{display:block;margin:13px 0 7px;font-weight:800}
-input,select,textarea{
-width:100%;padding:14px;border-radius:11px;
-border:1px solid #444;background:#222;color:#fff;font-size:16px
+
+label{
+display:block;
+margin:13px 0 7px;
+font-weight:800;
 }
+
+input,
+select,
+textarea{
+width:100%;
+padding:14px;
+border-radius:11px;
+border:1px solid #444;
+background:#222;
+color:#fff;
+font-size:16px;
+}
+
+textarea{
+min-height:90px;
+}
+
 button{
-border:0;border-radius:12px;padding:14px;
-font-weight:900;cursor:pointer
+border:0;
+border-radius:12px;
+padding:14px;
+font-weight:900;
+cursor:pointer;
 }
+
 #book{
-width:100%;background:#d8ad55;color:#111;
-font-size:17px;margin-top:18px
+width:100%;
+background:#d8ad55;
+color:#111;
+font-size:17px;
+margin-top:18px;
 }
-.muted{color:#aaa}
+
+#book:disabled{
+opacity:.5;
+}
+
+.muted{
+color:#aaa;
+}
+
 #timeGrid{
-display:grid;grid-template-columns:repeat(4,1fr);
-gap:9px;margin-top:12px
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:9px;
+margin-top:12px;
 }
-.timeBtn{padding:12px 6px;text-align:center}
+
+.timeBtn{
+padding:12px 6px;
+text-align:center;
+}
+
 .free{
-background:#163d24;color:#8cffaa;
-border:1px solid #2d7a45
+background:#163d24;
+color:#8cffaa;
+border:1px solid #2d7a45;
 }
+
 .busy{
-background:#441d1d;color:#ff9c9c;
-border:1px solid #7e3333;opacity:.75
+background:#441d1d;
+color:#ff9c9c;
+border:1px solid #7e3333;
+opacity:.8;
 }
-.selected{outline:3px solid #d8ad55}
+
+.selected{
+outline:3px solid #d8ad55;
+}
+
 #msg{
-margin-top:15px;font-weight:800;
-text-align:center;line-height:1.5
+margin-top:15px;
+font-weight:800;
+text-align:center;
+line-height:1.5;
 }
+
 .cancelBox{
-margin-top:18px;padding:14px;border-radius:12px;
-background:#222;border:1px solid #444;word-break:break-all
+margin-top:18px;
+padding:14px;
+border-radius:12px;
+background:#222;
+border:1px solid #444;
+word-break:break-all;
 }
-.cancelBox a{color:#d8ad55}
+
+.cancelBox a{
+color:#d8ad55;
+font-weight:800;
+}
 
 @media(max-width:600px){
-#timeGrid{grid-template-columns:repeat(3,1fr)}
+
+#timeGrid{
+grid-template-columns:repeat(3,1fr);
+}
+
 }
 </style>
 </head>
@@ -65,9 +147,13 @@ background:#222;border:1px solid #444;word-break:break-all
 
 <div class="wrap">
 
-<div class="logo">TERMINO</div>
+<div class="logo">
+TERMINO
+</div>
 
-<h1>Rezerviši termin</h1>
+<h1>
+Rezerviši termin
+</h1>
 
 <p class="muted">
 🟢 slobodno · 🔴 zauzeto. Klikni samo zeleni termin.
@@ -75,71 +161,124 @@ background:#222;border:1px solid #444;word-break:break-all
 
 <div class="card">
 
-<label>Salon</label>
+<label>
+Salon
+</label>
+
 <select id="salon">
-<option value="">-- Odaberi salon --</option>
+<option value="">
+-- Odaberi salon --
+</option>
 </select>
 
-<label>Usluga</label>
+<label>
+Usluga
+</label>
+
 <select id="service" disabled>
-<option value="">-- Odaberi salon --</option>
+<option value="">
+-- Odaberi salon --
+</option>
 </select>
 
-<label>Datum</label>
+<label>
+Datum
+</label>
+
 <input id="date" type="date">
 
-<label>Termini</label>
+<label>
+Termini
+</label>
 
 <div id="timeGrid">
+
 <div class="muted">
 Odaberi salon, uslugu i datum.
 </div>
-</div>
-
-<input id="selectedTime" type="hidden">
 
 </div>
+
+<input
+id="selectedTime"
+type="hidden"
+>
+
+</div>
+
 
 <div class="card">
 
-<label>Ime i prezime</label>
-<input id="name" type="text">
+<label>
+Ime i prezime
+</label>
 
-<label>Telefon</label>
-<input id="phone" type="tel">
+<input
+id="name"
+type="text"
+placeholder="Ime i prezime"
+>
 
-<label>Email</label>
-<input id="email" type="email">
+<label>
+Telefon
+</label>
 
-<label>Napomena</label>
-<textarea id="note"></textarea>
+<input
+id="phone"
+type="tel"
+placeholder="Broj telefona"
+>
+
+<label>
+Email
+</label>
+
+<input
+id="email"
+type="email"
+placeholder="Email adresa"
+>
+
+<label>
+Napomena
+</label>
+
+<textarea
+id="note"
+placeholder="Nije obavezno"
+></textarea>
 
 <button id="book">
 REZERVIŠI TERMIN
 </button>
 
 <div id="msg"></div>
+
 <div id="cancelInfo"></div>
 
 </div>
 
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const db = supabase.createClient(
+const db =
+supabase.createClient(
 "https://ykkopljgzdcnfbyutxzo.supabase.co",
 "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue"
 );
 
-const $ = id =>
+const $ =
+id =>
 document.getElementById(id);
 
-const pre =
-new URLSearchParams(location.search)
-.get("salon");
+const preselectedSalon =
+new URLSearchParams(
+location.search
+).get("salon");
 
 let serviceMap = {};
 
@@ -149,25 +288,33 @@ new Date()
 .slice(0,10);
 
 
-function toMin(t){
+function toMinutes(time){
 
-const [h,m] =
-t.split(":").map(Number);
+const parts =
+time.split(":")
+.map(Number);
 
-return h*60+m;
+return
+parts[0] * 60
++
+parts[1];
 
 }
 
 
-function fmt(m){
+function formatTime(minutes){
 
-return String(
-Math.floor(m/60)
-).padStart(2,"0")
+return
+String(
+Math.floor(minutes / 60)
+)
+.padStart(2,"0")
 +
 ":"
 +
-String(m%60)
+String(
+minutes % 60
+)
 .padStart(2,"0");
 
 }
@@ -175,13 +322,20 @@ String(m%60)
 
 async function loadSalons(){
 
-const {data,error} =
+const {
+data,
+error
+} =
 await db
 .from("salons")
 .select("id,name")
 .order("name");
 
+
 if(error){
+
+$("msg").style.color =
+"#ff7373";
 
 $("msg").textContent =
 "Greška pri učitavanju salona.";
@@ -190,23 +344,29 @@ return;
 
 }
 
-(data || []).forEach(s=>{
 
-const o =
+(data || [])
+.forEach(salon=>{
+
+const option =
 document.createElement("option");
 
-o.value = s.id;
+option.value =
+salon.id;
 
-o.textContent =
-s.name || "Salon";
+option.textContent =
+salon.name || "Salon";
 
-$("salon").appendChild(o);
+$("salon")
+.appendChild(option);
 
 });
 
-if(pre){
 
-$("salon").value = pre;
+if(preselectedSalon){
+
+$("salon").value =
+preselectedSalon;
 
 await loadServices();
 
@@ -217,18 +377,21 @@ await loadServices();
 
 async function loadServices(){
 
-const salon =
+const salonId =
 $("salon").value;
 
 $("service").innerHTML =
 '<option value="">-- Odaberi uslugu --</option>';
 
 $("service").disabled =
-!salon;
+!salonId;
 
 serviceMap = {};
 
-if(!salon){
+$("selectedTime").value = "";
+
+
+if(!salonId){
 
 $("timeGrid").innerHTML =
 '<div class="muted">Odaberi salon, uslugu i datum.</div>';
@@ -237,17 +400,28 @@ return;
 
 }
 
-const {data,error} =
+
+const {
+data,
+error
+} =
 await db
 .from("services")
 .select(
 "id,name,category,price,duration_minutes"
 )
-.eq("salon_id",salon)
+.eq(
+"salon_id",
+salonId
+)
 .order("category")
 .order("name");
 
+
 if(error){
+
+$("msg").style.color =
+"#ff7373";
 
 $("msg").textContent =
 "Greška pri učitavanju usluga.";
@@ -256,24 +430,32 @@ return;
 
 }
 
-(data || []).forEach(s=>{
 
-serviceMap[s.id] = s;
+(data || [])
+.forEach(service=>{
 
-const o =
+serviceMap[
+service.id
+] =
+service;
+
+const option =
 document.createElement("option");
 
-o.value = s.id;
+option.value =
+service.id;
 
-o.textContent =
-`${s.category || ""}
-— ${s.name}
-— ${s.price} €
-— ${s.duration_minutes} min`;
+option.textContent =
+`${service.category || ""}
+— ${service.name}
+— ${service.price} €
+— ${service.duration_minutes} min`;
 
-$("service").appendChild(o);
+$("service")
+.appendChild(option);
 
 });
+
 
 await loadTimes();
 
@@ -289,6 +471,7 @@ grid.innerHTML = "";
 
 $("selectedTime").value = "";
 
+
 if(!items.length){
 
 grid.innerHTML =
@@ -298,37 +481,59 @@ return;
 
 }
 
+
 items.forEach(item=>{
 
-const b =
+const button =
 document.createElement("button");
 
-b.type = "button";
+button.type =
+"button";
 
-b.className =
+button.className =
 "timeBtn "
 +
-(item.free ? "free" : "busy");
+(
+item.free
+?
+"free"
+:
+"busy"
+);
 
-b.textContent =
-(item.free ? "🟢 " : "🔴 ")
+button.textContent =
+(
+item.free
+?
+"🟢 "
+:
+"🔴 "
+)
 +
 item.time;
 
-b.disabled =
+button.disabled =
 !item.free;
+
 
 if(item.free){
 
-b.onclick = ()=>{
+button.onclick =
+()=>{
 
 document
-.querySelectorAll(".timeBtn")
+.querySelectorAll(
+".timeBtn"
+)
 .forEach(x=>
-x.classList.remove("selected")
+x.classList.remove(
+"selected"
+)
 );
 
-b.classList.add("selected");
+button.classList.add(
+"selected"
+);
 
 $("selectedTime").value =
 item.time;
@@ -337,7 +542,10 @@ item.time;
 
 }
 
-grid.appendChild(b);
+
+grid.appendChild(
+button
+);
 
 });
 
@@ -346,7 +554,7 @@ grid.appendChild(b);
 
 async function loadTimes(){
 
-const salon =
+const salonId =
 $("salon").value;
 
 const serviceId =
@@ -355,8 +563,9 @@ $("service").value;
 const date =
 $("date").value;
 
+
 if(
-!salon ||
+!salonId ||
 !serviceId ||
 !date
 ){
@@ -364,12 +573,21 @@ if(
 $("timeGrid").innerHTML =
 '<div class="muted">Odaberi salon, uslugu i datum.</div>';
 
+$("selectedTime").value = "";
+
 return;
 
 }
 
+
 const service =
-serviceMap[serviceId];
+serviceMap[
+serviceId
+];
+
+
+if(!service)
+return;
 
 
 const {
@@ -378,13 +596,26 @@ error:slotError
 } =
 await db
 .from("availability_slots")
-.select("slot_time,is_available")
-.eq("salon_id",salon)
-.eq("slot_date",date)
-.order("slot_time");
+.select(
+"slot_time,is_available"
+)
+.eq(
+"salon_id",
+salonId
+)
+.eq(
+"slot_date",
+date
+)
+.order(
+"slot_time"
+);
 
 
 if(slotError){
+
+$("msg").style.color =
+"#ff7373";
 
 $("msg").textContent =
 "Greška pri učitavanju termina.";
@@ -395,58 +626,88 @@ return;
 
 
 const {
-data:bookings
+data:busyBookings,
+error:busyError
 } =
-await db
-.from("bookings")
-.select(`
-booking_time,
-status,
-services(
-duration_minutes
+await db.rpc(
+"get_busy_bookings",
+{
+p_salon_id:
+salonId,
+
+p_booking_date:
+date
+}
+);
+
+
+if(busyError){
+
+$("msg").style.color =
+"#ff7373";
+
+$("msg").textContent =
+"Greška pri provjeri zauzetih termina.";
+
+return;
+
+}
+
+
+const availability = {};
+
+
+(slots || [])
+.forEach(slot=>{
+
+availability[
+String(
+slot.slot_time
 )
-`)
-.eq("salon_id",salon)
-.eq("booking_date",date);
-
-
-const map = {};
-
-(slots || []).forEach(s=>{
-
-map[
-String(s.slot_time)
 .slice(0,5)
 ] =
-s.is_available === true;
+slot.is_available === true;
 
 });
 
 
 const allTimes = [];
 
+
 for(
-let h=8;
-h<=20;
-h++
+let hour = 8;
+hour <= 20;
+hour++
 ){
 
 for(
-const m of [0,15,30,45]
+const minute
+of
+[0,15,30,45]
 ){
 
 if(
-h===20 &&
-m>0
+hour === 20
+&&
+minute > 0
 )
 continue;
 
+
 allTimes.push(
-String(h).padStart(2,"0")
+
+String(hour)
+.padStart(2,"0")
+
 +
+
 ":"
+
 +
-String(m).padStart(2,"0")
+
+String(minute)
+.padStart(2,"0")
+
 );
 
 }
@@ -454,71 +715,86 @@ String(m).padStart(2,"0")
 }
 
 
-function overlaps(
+function overlapsBooking(
 start,
 duration
 ){
 
 const end =
-start + duration;
+start
++
+duration;
 
-return (bookings || [])
-.some(b=>{
 
-const status =
-(b.status || "")
-.toLowerCase();
+return
+(busyBookings || [])
+.some(booking=>{
 
-if(
-status==="cancelled" ||
-status==="canceled"
+const busyStart =
+toMinutes(
+String(
+booking.booking_time
 )
-return false;
-
-const bs =
-toMin(
-String(b.booking_time)
 .slice(0,5)
 );
 
-const bd =
-b.services?.duration_minutes
+
+const busyDuration =
+booking.duration_minutes
 ||
 0;
 
+
+const busyEnd =
+busyStart
++
+busyDuration;
+
+
 return
-bs < end
+busyStart < end
 &&
-(bs+bd) > start;
+busyEnd > start;
 
 });
 
 }
 
 
-const required =
+const requiredSlots =
 Math.ceil(
-service.duration_minutes / 15
+service.duration_minutes
+/
+15
 );
 
 
 const result =
-allTimes.map(t=>{
+allTimes.map(time=>{
 
 const start =
-toMin(t);
+toMinutes(time);
 
 let free = true;
 
+
 for(
-let i=0;
-i<required;
+let i = 0;
+i < requiredSlots;
 i++
 ){
 
+const neededTime =
+formatTime(
+start
++
+i * 15
+);
+
+
 if(
-map[
-fmt(start+i*15)
+availability[
+neededTime
 ]
 !== true
 ){
@@ -531,9 +807,11 @@ break;
 
 }
 
+
 if(
-free &&
-overlaps(
+free
+&&
+overlapsBooking(
 start,
 service.duration_minutes
 )
@@ -543,15 +821,18 @@ free = false;
 
 }
 
+
 return {
-time:t,
+time,
 free
 };
 
 });
 
 
-renderTimes(result);
+renderTimes(
+result
+);
 
 }
 
@@ -562,11 +843,13 @@ $("salon")
 loadServices
 );
 
+
 $("service")
 .addEventListener(
 "change",
 loadTimes
 );
+
 
 $("date")
 .addEventListener(
@@ -579,6 +862,7 @@ $("book")
 .addEventListener(
 "click",
 async()=>{
+
 
 const salonId =
 $("salon").value;
@@ -626,13 +910,17 @@ return;
 }
 
 
-$("book").disabled = true;
+$("book").disabled =
+true;
 
 $("book").textContent =
 "PROVJERA...";
 
 
-const {data,error} =
+const {
+data,
+error
+} =
 await db.rpc(
 "create_booking_if_available",
 {
@@ -665,7 +953,8 @@ note || null
 );
 
 
-$("book").disabled = false;
+$("book").disabled =
+false;
 
 $("book").textContent =
 "REZERVIŠI TERMIN";
@@ -711,7 +1000,9 @@ location.pathname.replace(
 +
 "?token="
 +
-encodeURIComponent(token);
+encodeURIComponent(
+token
+);
 
 
 $("cancelInfo").innerHTML =
@@ -719,7 +1010,7 @@ $("cancelInfo").innerHTML =
 <div class="cancelBox">
 
 <strong>
-Sačuvaj ovaj link ako želiš kasnije otkazati termin:
+Sačuvaj link ako želiš kasnije otkazati termin:
 </strong>
 
 <br><br>
