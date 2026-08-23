@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TERMINO Admin</title>
+
+<style>
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:#0b0b0b;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding:20px;
+}
+
+.wrap {
+  max-width:900px;
+  margin:20px auto;
+}
+
+.logo {
+  color:#d8ad55;
+  font-size:38px;
+  font-weight:bold;
+}
+
+.card {
+  background:#151515;
+  border:1px solid #333;
+  border-radius:18px;
+  padding:18px;
+  margin:14px 0;
+}
+
+.row {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+}
+
+.meta {
+  color:#aaa;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.badge {
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  background:#292929;
+  margin:8px 0;
+}
+
+button {
+  border:0;
+  border-radius:10px;
+  padding:12px;
+  font-weight:bold;
+  margin:4px;
+}
+
+.activate {
+  background:#d8ad55;
+  color:#111;
+}
+
+.suspend {
+  background:#333;
+  color:white;
+}
+
+.ban {
+  background:#8b2929;
+  color:white;
+}
+
+@media(max-width:600px) {
+  .row {
+    grid-template-columns:1fr;
+  }
+
+  button {
+    width:100%;
+    margin:5px 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<div class="logo">TERMINO</div>
+
+<h1>Admin panel</h1>
+
+<p>
+Pretplata:
+<strong>30 € mjesečno</strong><br>
+Novi salon dobija <strong>7 dana besplatno</strong>.
+</p>
+
+<div id="message"></div>
+
+<div id="salons">
+  <div class="card">Učitavanje salona...</div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://ykkopljgzdcnfbyutxzo.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const salonsBox =
+document.getElementById("salons");
+
+const message =
+document.getElementById("message");
+
+
+function formatDate(date) {
+
+  if(!date) return "-";
+
+  return new Date(date)
+  .toLocaleString("hr-HR");
+
+}
+
+
+async function checkAdmin() {
+
+  const {
+    data:{user}
+  } = await db.auth.getUser();
+
+  if(!user) {
+
+    window.location.href =
+    "login.html";
+
+    return false;
+  }
+
+
+  const {data,error} =
+  await db
+  .from("app_admins")
+  .select("user_id")
+  .eq("user_id",user.id)
+  .maybeSingle();
+
+
+  if(error || !data) {
+
+    document.body.innerHTML =
+    "<h2 style='padding:30px'>Nemate admin pristup.</h2>";
+
+    return false;
+  }
+
+  return true;
+}
+
+
+async function loadSalons() {
+
+  const allowed =
+  await checkAdmin();
+
+  if(!allowed) return;
+
+
+  const {data,error} =
+  await db
+  .from("salons")
+  .select(`
+    id,
+    name,
+    address,
+    phone,
+    subscriptions(
+      status,
+      trial_ends_at,
+      current_period_end,
+      suspension_reason
+    )
+  `)
+  .order("name");
+
+
+  if(error) {
+
+    salonsBox.innerHTML =
+    "<div class='card'>Greška: "
+    + error.message +
+    "</div>";
+
+    return;
+  }
+
+
+  salonsBox.innerHTML = "";
+
+
+  data.forEach(salon => {
+
+    const sub =
+    Array.isArray(salon.subscriptions)
+    ? salon.subscriptions[0]
+    : salon.subscriptions;
+
+
+    const status =
+    sub?.status || "trial";
+
+
+    const card =
+    document.createElement("div");
+
+    card.className = "card";
+
+
+    card.innerHTML = `
+
+    <div class="row">
+
+      <div>
+
+        <h2>
+        ${salon.name || "Salon"}
+        </h2>
+
+        <div class="meta">
+
+        ${salon.address || ""}
+
+        <br>
+
+        ${salon.phone || ""}
+
+        </div>
+
+        <div class="badge">
+        Status: ${status}
+        </div>
+
+        <div class="meta">
+
+        Trial do:
+        ${formatDate(sub?.trial_ends_at)}
+
+        <br>
+
+        Aktivno do:
+        ${formatDate(sub?.current_period_end)}
+
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <button
+        class="activate"
+        onclick="activateSalon('${salon.id}')">
+
+        AKTIVIRAJ 30 DANA
+
+        </button>
+
+
+        <button
+        class="suspend"
+        onclick="suspendSalon('${salon.id}')">
+
+        SUSPENDUJ
+
+        </button>
+
+
+        <button
+        class="ban"
+        onclick="banSalon('${salon.id}')">
+
+        BAN
+
+        </button>
+
+
+        <button
+        class="suspend"
+        onclick="trialSalon('${salon.id}')">
+
+        DAJ 7 DANA
+
+        </button>
+
+      </div>
+
+    </div>
+
+    `;
+
+
+    salonsBox.appendChild(card);
+
+  });
+
+}
+
+
+async function activateSalon(id) {
+
+  const {error} =
+  await db.rpc(
+    "admin_activate_30_days",
+    {target_salon_id:id}
+  );
+
+  if(error)
+    alert(error.message);
+  else
+    alert("Salon aktiviran 30 dana.");
+
+  loadSalons();
+}
+
+
+async function suspendSalon(id) {
+
+  const reason =
+  prompt(
+    "Razlog suspenzije:",
+    "Nije plaćena pretplata"
+  );
+
+
+  const {error} =
+  await db.rpc(
+    "admin_suspend_salon",
+    {
+      target_salon_id:id,
+      reason:reason || "manual_suspend"
+    }
+  );
+
+
+  if(error)
+    alert(error.message);
+  else
+    alert("Salon suspendovan.");
+
+  loadSalons();
+}
+
+
+async function banSalon(id) {
+
+  if(!confirm(
+    "Da li sigurno želiš banovati salon?"
+  ))
+  return;
+
+
+  const {error} =
+  await db.rpc(
+    "admin_ban_salon",
+    {
+      target_salon_id:id,
+      reason:"admin_ban"
+    }
+  );
+
+
+  if(error)
+    alert(error.message);
+  else
+    alert("Salon je banovan.");
+
+  loadSalons();
+}
+
+
+async function trialSalon(id) {
+
+  const {error} =
+  await db.rpc(
+    "admin_unban_to_trial",
+    {
+      target_salon_id:id
+    }
+  );
+
+
+  if(error)
+    alert(error.message);
+  else
+    alert("Salon dobija novih 7 dana.");
+
+  loadSalons();
+}
+
+
+loadSalons();
+
+</script>
+
+</body>
+</html>
