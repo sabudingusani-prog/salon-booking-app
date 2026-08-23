@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TERMINO | Moj salon</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -21,424 +18,475 @@
 
     .container {
       width: 100%;
-      max-width: 700px;
-      margin: 40px auto;
+      max-width: 760px;
+      margin: 24px auto;
     }
 
     .logo {
       color: #d8ad55;
-      font-size: 38px;
-      font-weight: bold;
+      font-size: 40px;
+      font-weight: 800;
       margin-bottom: 8px;
+      letter-spacing: 1px;
     }
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 34px;
+      margin: 0 0 8px;
     }
 
     .subtitle {
       color: #aaa;
-      margin-bottom: 30px;
+      font-size: 18px;
+      margin-bottom: 28px;
     }
 
     .card {
       background: #151515;
       border: 1px solid #333;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 18px;
+      border-radius: 22px;
+      padding: 24px;
+      margin-bottom: 22px;
     }
 
     .card h2 {
-      margin-top: 0;
+      margin: 0 0 20px;
+      font-size: 28px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      font-size: 16px;
+      color: #eee;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-size: 16px;
+    }
+
+    select {
+      appearance: auto;
     }
 
     button {
       width: 100%;
+      margin-top: 18px;
       padding: 15px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #d8ad55;
       color: #111;
       font-size: 17px;
-      font-weight: bold;
+      font-weight: 800;
       cursor: pointer;
+    }
+
+    button.secondary {
+      background: #242424;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    button.danger {
+      width: auto;
+      margin: 0;
+      padding: 9px 12px;
+      background: #3a1f1f;
+      color: #ff9b9b;
+      border: 1px solid #603333;
+      font-size: 14px;
+    }
+
+    .message {
+      margin-top: 14px;
+      min-height: 22px;
+    }
+
+    .category-title {
+      margin: 24px 0 10px;
+      color: #d8ad55;
+      font-size: 20px;
+    }
+
+    .service-item {
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .service-info {
+      line-height: 1.5;
+    }
+
+    .service-info strong {
+      font-size: 17px;
+    }
+
+    .muted {
+      color: #aaa;
+    }
+
+    .empty {
+      color: #aaa;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 18px; }
+      .container { margin: 16px auto; }
+      .logo { font-size: 34px; }
+      h1 { font-size: 30px; }
+      .card { padding: 20px; }
+      .service-item {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      button.danger { width: 100%; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="container">
-
     <div class="logo">TERMINO</div>
-
     <h1>Moj salon</h1>
-    <div class="subtitle">Upravljajte svojim salonom i terminima.</div>
+    <div class="subtitle">Upravljajte svojim salonom, uslugama i terminima.</div>
 
     <div class="card">
       <h2>📅 Termini</h2>
-      <p>Ovdje ćemo prikazivati rezervacije vaših klijenata.</p>
+      <p class="muted">Ovdje ćemo prikazivati rezervacije vaših klijenata.</p>
     </div>
 
     <div class="card">
-     <div class="card">
-  <h2>✂️ Usluge</h2>
-<label>Kategorija</label>
-<select id="serviceCategory">
-  <option value="">-- Odaberi kategoriju --</option>
-  <option value="Muski frizer">💈 Muški frizer</option>
-  <option value="Zenski frizer">💇‍♀️ Ženski frizer</option>
-  <option value="Barber">🧔 Barber / Brada</option>
-  <option value="Nokti">💅 Nokti</option>
-  <option value="Manikir">💅 Manikir</option>
-  <option value="Pedikir">🦶 Pedikir</option>
-  <option value="Obrve i trepavice">👁️ Obrve i trepavice</option>
-  <option value="Sminkanje">💄 Šminkanje</option>
-  <option value="Depilacija">✨ Depilacija</option>
-  <option value="Masaza">💆 Masaža</option>
-  <option value="Kozmeticki tretmani">🧴 Kozmetički tretmani</option>
-</select>
-  <label>Naziv usluge</label>
-  <input type="text" id="serviceName" placeholder="npr. Muško šišanje">
+      <h2>🏪 Podaci salona</h2>
 
-  <label>Cijena (€)</label>
-  <input type="number" id="servicePrice" placeholder="20" step="0.01">
+      <label for="salonName">Naziv salona</label>
+      <input type="text" id="salonName" placeholder="Naziv salona">
 
-  <label>Trajanje (minuta)</label>
-  <input type="number" id="serviceDuration" placeholder="30">
+      <label for="salonAddress">Adresa</label>
+      <input type="text" id="salonAddress" placeholder="Adresa">
 
-  <button type="button" onclick="addService()">DODAJ USLUGU</button>
+      <label for="salonPhone">Telefon</label>
+      <input type="tel" id="salonPhone" placeholder="Broj telefona">
 
-  <p id="serviceMessage"></p>
-
-  <div id="servicesList"></div>
-</div>
+      <button type="button" onclick="saveSalon()">SPREMI PODATKE</button>
+      <div id="salonMessage" class="message"></div>
+    </div>
 
     <div class="card">
-  <h2>🏪 Podaci salona</h2>
+      <h2>✂️ Usluge</h2>
 
-  <label>Naziv salona</label>
-  <input type="text" id="salonName" placeholder="Naziv salona">
+      <label for="serviceCategory">Kategorija</label>
+      <select id="serviceCategory">
+        <option value="">-- Odaberi kategoriju --</option>
+        <option value="Muški frizer">💈 Muški frizer</option>
+        <option value="Ženski frizer">💇‍♀️ Ženski frizer</option>
+        <option value="Barber / Brada">🧔 Barber / Brada</option>
+        <option value="Nokti">💅 Nokti</option>
+        <option value="Manikir">💅 Manikir</option>
+        <option value="Pedikir">🦶 Pedikir</option>
+        <option value="Obrve i trepavice">👁️ Obrve i trepavice</option>
+        <option value="Šminkanje">💄 Šminkanje</option>
+        <option value="Depilacija">✨ Depilacija</option>
+        <option value="Masaža">💆 Masaža</option>
+        <option value="Kozmetički tretmani">🧴 Kozmetički tretmani</option>
+      </select>
 
-  <label>Adresa</label>
-  <input type="text" id="salonAddress" placeholder="Adresa">
+      <label for="serviceName">Naziv usluge</label>
+      <input type="text" id="serviceName" placeholder="npr. Fade + brada">
 
-  <label>Telefon</label>
-  <input type="tel" id="salonPhone" placeholder="Broj telefona">
+      <label for="servicePrice">Cijena (€)</label>
+      <input type="number" id="servicePrice" placeholder="20" step="0.01" min="0">
 
-  <button type="button" onclick="saveSalon()">SPREMI PODATKE</button>
+      <label for="serviceDuration">Trajanje (minuta)</label>
+      <input type="number" id="serviceDuration" placeholder="30" min="1">
 
-  <p id="salonMessage"></p>
-</div>
+      <button type="button" onclick="addService()">DODAJ USLUGU</button>
+      <div id="serviceMessage" class="message"></div>
 
-    <button onclick="logout()">ODJAVI SE</button>
+      <div id="servicesList"></div>
+    </div>
 
+    <button type="button" class="secondary" onclick="logout()">ODJAVI SE</button>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
+    const SUPABASE_URL = "https://ykkopljgzdcnfbyutxzo.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function setMessage(element, text, ok = false) {
+      element.style.color = ok ? "#7ee787" : "#ff7373";
+      element.textContent = text;
+    }
+
+    async function getCurrentUser() {
+      const { data: { user }, error } = await supabaseClient.auth.getUser();
+      if (error || !user) {
+        window.location.href = "login.html";
+        return null;
+      }
+      return user;
+    }
+
     async function logout() {
+      await supabaseClient.auth.signOut();
       window.location.href = "login.html";
-    }const SUPABASE_URL = "https://ykkopljgzdcnfbyutxzo.supabase.co";
-const SUPABASE_KEY = "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
-
-const supabaseClient =
-  window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-async function saveSalon() {
-  const message = document.getElementById("salonMessage");
-  const name = document.getElementById("salonName").value.trim();
-  const address = document.getElementById("salonAddress").value.trim();
-  const phone = document.getElementById("salonPhone").value.trim();
-
-  const { data: { user }, error: userError } =
-    await supabaseClient.auth.getUser();
-
-  if (userError || !user) {
-    message.style.color = "#ff7373";
-    message.textContent = "Morate biti prijavljeni.";
-    return;
-  }
-
-  const { data: existingSalon } = await supabaseClient
-    .from("salons")
-    .select("id")
-    .eq("owner_id", user.id)
-    .maybeSingle();
-
-  let result;
-
-  if (existingSalon) {
-    result = await supabaseClient
-      .from("salons")
-      .update({ name, address, phone })
-      .eq("owner_id", user.id);
-  } else {
-    result = await supabaseClient
-      .from("salons")
-      .insert({ owner_id: user.id, name, address, phone });
-  }
-
-  if (result.error) {
-    message.style.color = "#ff7373";
-    message.textContent = "Greška: " + result.error.message;
-    return;
-  }
-
-      message.style.color = "#7ee787";
-    message.textContent = "✅ Podaci salona su spremljeni.";
-}
-
-async function addService() {
-    const message = document.getElementById("serviceMessage");
-
-    const name = document.getElementById("serviceName").value.trim();
-    const price = parseFloat(document.getElementById("servicePrice").value);
-    const duration = parseInt(document.getElementById("serviceDuration").value);
-const category = document.getElementById("serviceCategory").value;
-    if (!category || !name || isNaN(price) || isNaN(duration)) {
-        message.style.color = "#ff7373";
-        message.textContent = "Popunite sva polja za uslugu.";
-        return;
     }
 
-    const { data: { user }, error: userError } =
-        await supabaseClient.auth.getUser();
+    async function loadSalon() {
+      const user = await getCurrentUser();
+      if (!user) return null;
 
-    if (userError || !user) {
-        message.style.color = "#ff7373";
-        message.textContent = "Morate biti prijavljeni.";
-        return;
+      const { data: salon, error } = await supabaseClient
+        .from("salons")
+        .select("id, name, address, phone")
+        .eq("owner_id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Greška pri učitavanju salona:", error);
+        return null;
+      }
+
+      if (salon) {
+        document.getElementById("salonName").value = salon.name || "";
+        document.getElementById("salonAddress").value = salon.address || "";
+        document.getElementById("salonPhone").value = salon.phone || "";
+      }
+
+      return salon;
     }
 
-    const { data: salon, error: salonError } = await supabaseClient
+    async function saveSalon() {
+      const message = document.getElementById("salonMessage");
+      const user = await getCurrentUser();
+      if (!user) return;
+
+      const name = document.getElementById("salonName").value.trim();
+      const address = document.getElementById("salonAddress").value.trim();
+      const phone = document.getElementById("salonPhone").value.trim();
+
+      if (!name) {
+        setMessage(message, "Upišite naziv salona.");
+        return;
+      }
+
+      const { data: existingSalon, error: findError } = await supabaseClient
         .from("salons")
         .select("id")
         .eq("owner_id", user.id)
         .maybeSingle();
 
-    if (salonError || !salon) {
-        message.style.color = "#ff7373";
-        message.textContent = "Prvo spremite podatke salona.";
+      if (findError) {
+        setMessage(message, "Greška: " + findError.message);
         return;
+      }
+
+      let error;
+
+      if (existingSalon) {
+        ({ error } = await supabaseClient
+          .from("salons")
+          .update({ name, address, phone })
+          .eq("owner_id", user.id));
+      } else {
+        ({ error } = await supabaseClient
+          .from("salons")
+          .insert({ owner_id: user.id, name, address, phone }));
+      }
+
+      if (error) {
+        setMessage(message, "Greška: " + error.message);
+        return;
+      }
+
+      setMessage(message, "✅ Podaci salona su spremljeni.", true);
+      await loadSalon();
+      await loadServices();
     }
 
-    const { error } = await supabaseClient
+    async function addService() {
+      const message = document.getElementById("serviceMessage");
+      const user = await getCurrentUser();
+      if (!user) return;
+
+      const category = document.getElementById("serviceCategory").value;
+      const name = document.getElementById("serviceName").value.trim();
+      const price = Number(document.getElementById("servicePrice").value);
+      const duration = Number.parseInt(document.getElementById("serviceDuration").value, 10);
+
+      if (!category || !name || !Number.isFinite(price) || price < 0 || !Number.isInteger(duration) || duration <= 0) {
+        setMessage(message, "Odaberite kategoriju i popunite sva polja.");
+        return;
+      }
+
+      const { data: salon, error: salonError } = await supabaseClient
+        .from("salons")
+        .select("id")
+        .eq("owner_id", user.id)
+        .maybeSingle();
+
+      if (salonError) {
+        setMessage(message, "Greška: " + salonError.message);
+        return;
+      }
+
+      if (!salon) {
+        setMessage(message, "Prvo spremite podatke salona.");
+        return;
+      }
+
+      const { error } = await supabaseClient
         .from("services")
         .insert({
-            salon_id: salon.id,
-          category: category,
-            name: name,
-            price: price,
-            duration_minutes: duration
+          salon_id: salon.id,
+          category,
+          name,
+          price,
+          duration_minutes: duration
         });
 
-    if (error) {
-        message.style.color = "#ff7373";
-        message.textContent = "Greška: " + error.message;
+      if (error) {
+        setMessage(message, "Greška: " + error.message);
         return;
+      }
+
+      document.getElementById("serviceCategory").value = "";
+      document.getElementById("serviceName").value = "";
+      document.getElementById("servicePrice").value = "";
+      document.getElementById("serviceDuration").value = "";
+
+      setMessage(message, "✅ Usluga je dodana.", true);
+      await loadServices();
     }
 
-    message.style.color = "#7ee787";
-    message.textContent = "✅ Usluga je dodana.";
+    async function deleteService(serviceId) {
+      if (!confirm("Obrisati ovu uslugu?")) return;
 
-    document.getElementById("serviceName").value = "";
-    document.getElementById("servicePrice").value = "";
-    document.getElementById("serviceDuration").value = "";
-}
+      const message = document.getElementById("serviceMessage");
 
-}
-  message.textContent = "✅ Podaci salona su async function }
-async function addService() {
-    const message = document.getElementById("serviceMessage");
+      const { error } = await supabaseClient
+        .from("services")
+        .delete()
+        .eq("id", serviceId);
 
-  const name = document.getElementById("serviceName").value.trim();
-  const price = parseFloat(document.getElementById("servicePrice").value);
-  const duration = parseInt(document.getElementById("serviceDuration").value);
+      if (error) {
+        setMessage(message, "Greška: " + error.message);
+        return;
+      }
 
-  if (!name || isNaN(price) || isNaN(duration)) {
-    message.style.color = "#ff7373";
-    message.textContent = "Popunite sva polja za uslugu.";
-    return;
-  }
-
-  const { data: { user }, error: userError } =
-    await supabaseClient.auth.getUser();
-
-  if (userError || !user) {
-    message.style.color = "#ff7373";
-    message.textContent = "Morate biti prijavljeni.";
-    return;
-  }
-
-  const { data: salon, error: salonError } = await supabaseClient
-    .from("salons")
-    .select("id")
-    .eq("owner_id", user.id)
-    .maybeSingle();
-
-  if (salonError || !salon) {
-    message.style.color = "#ff7373";
-    message.textContent = "Prvo spremite podatke salona.";
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("services")
-    .insert({
-      salon_id: salon.id,
-      name: name,
-      price: price,
-      duration_minutes: duration
-    });
-
-  if (error) {
-    message.style.color = "#ff7373";
-    message.textContent = "Greška: " + error.message;
-    return;
-  }
-
-  message.style.color = "#7ee787";
-  message.textContent = "✅ Usluga je dodana.";
-
-  document.getElementById("serviceName").value = "";
-  document.getElementById("servicePrice").value = "";
-  document.getElementById("serviceDuration").
-await 
-  }
-async function loadServices() {
-  const { data: { user }, error: userError } =
-    await supabaseClient.auth.getUser();
-
-  if (userError || !user) return;
-
-  const { data: salon, error: salonError } = await supabaseClient
-    .from("salons")
-    .select("id")
-    .eq("owner_id", user.id)
-    .maybeSingle();
-
-  if (salonError || !salon) return;
-
-  const { data: services, error } = await supabaseClient
-    .from("services")
-    .select("*")
-    .eq("salon_id", salon.id)
-    .order("category")
-    .order("name");
-
-  if (error) {
-    console.log(error);
-    return;
-  }
-
-  const list = document.getElementById("servicesList");
-
-  list.innerHTML = "";
-
-  if (!services || services.length === 0) {
-    list.innerHTML = "<p>Još nema dodanih usluga.</p>";
-    return;
-  }
-
-  const groups = {};
-
-  services.forEach(service => {
-    const category = service.category || "Ostalo";
-
-    if (!groups[category]) {
-      groups[category] = [];
+      setMessage(message, "✅ Usluga je obrisana.", true);
+      await loadServices();
     }
 
-    groups[category].push(service);
-  });
+    async function loadServices() {
+      const list = document.getElementById("servicesList");
+      list.innerHTML = "";
 
-  Object.keys(groups).forEach(category => {
-    const categoryTitle = document.createElement("h3");
-    categoryTitle.textContent = category;
-    categoryTitle.style.marginTop = "24px";
-    categoryTitle.style.color = "#d8ad55";
+      const user = await getCurrentUser();
+      if (!user) return;
 
-    list.appendChild(categoryTitle);
-
-    groups[category].forEach(service => {
-      const item = document.createElement("div");
-
-      item.style.background = "#222";
-      item.style.border = "1px solid #333";
-      item.style.borderRadius = "12px";
-      item.style.padding = "14px";
-      item.style.marginBottom = "10px";
-
-      item.innerHTML =
-        "<strong>" + service.name + "</strong><br>" +
-        service.price + " € · " +
-        service.duration_minutes + " min";
-
-      list.appendChild(item);
-    });
-  });
-}
-    const { data: { user }, error: userError } =
-        await supabaseClient.auth.getUser();
-
-    if (userError || !user) return;
-
-    const { data: salon, error: salonError } = await supabaseClient
+      const { data: salon, error: salonError } = await supabaseClient
         .from("salons")
         .select("id")
         .eq("owner_id", user.id)
         .maybeSingle();
 
-    if (salonError || !salon) return;
+      if (salonError) {
+        console.error("Greška pri učitavanju salona:", salonError);
+        return;
+      }
 
-    const { data: services, error } = await supabaseClient
+      if (!salon) {
+        list.innerHTML = '<p class="empty">Prvo spremite podatke salona.</p>';
+        return;
+      }
+
+      const { data: services, error } = await supabaseClient
         .from("services")
-        .select("*")
-        .eq("salon_id", salon.id);
+        .select("id, category, name, price, duration_minutes")
+        .eq("salon_id", salon.id)
+        .order("category", { ascending: true })
+        .order("name", { ascending: true });
 
-    if (error) {
-        console.log(error);
+      if (error) {
+        console.error("Greška pri učitavanju usluga:", error);
+        list.innerHTML = '<p class="empty">Greška pri učitavanju usluga.</p>';
         return;
-    }
+      }
 
-    let list = document.getElementById("servicesList");
-
-    if (!list) {
-        list = document.createElement("div");
-        list.id = "servicesList";
-
-        const serviceMessage =
-            document.getElementById("serviceMessage");
-
-        serviceMessage.parentNode.appendChild(list);
-    }
-
-    list.innerHTML = "";
-
-    if (!services || services.length === 0) {
-        list.innerHTML = "<p>Još nema dodanih usluga.</p>";
+      if (!services || services.length === 0) {
+        list.innerHTML = '<p class="empty">Još nema dodanih usluga.</p>';
         return;
+      }
+
+      const groups = {};
+
+      services.forEach(service => {
+        const category = service.category || "Ostalo";
+        if (!groups[category]) groups[category] = [];
+        groups[category].push(service);
+      });
+
+      Object.entries(groups).forEach(([category, items]) => {
+        const title = document.createElement("h3");
+        title.className = "category-title";
+        title.textContent = category;
+        list.appendChild(title);
+
+        items.forEach(service => {
+          const item = document.createElement("div");
+          item.className = "service-item";
+
+          const info = document.createElement("div");
+          info.className = "service-info";
+
+          const strong = document.createElement("strong");
+          strong.textContent = service.name;
+
+          const details = document.createElement("div");
+          details.className = "muted";
+          details.textContent = `${Number(service.price).toFixed(2)} € · ${service.duration_minutes} min`;
+
+          info.appendChild(strong);
+          info.appendChild(details);
+
+          const deleteButton = document.createElement("button");
+          deleteButton.type = "button";
+          deleteButton.className = "danger";
+          deleteButton.textContent = "OBRIŠI";
+          deleteButton.addEventListener("click", () => deleteService(service.id));
+
+          item.appendChild(info);
+          item.appendChild(deleteButton);
+          list.appendChild(item);
+        });
+      });
     }
 
-    services.forEach(service => {
-        const item = document.createElement("div");
+    async function initDashboard() {
+      const user = await getCurrentUser();
+      if (!user) return;
+      await loadSalon();
+      await loadServices();
+    }
 
-        item.innerHTML =
-            "<p><strong>" + service.name + "</strong><br>" +
-            service.price + " € · " +
-            service.duration_minutes + " min</p>";
-
-        list.appendChild(item);
-    });
-}
-
-loadServices();
-
+    initDashboard();
   </script>
-
 </body>
 </html>
