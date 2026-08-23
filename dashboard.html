@@ -312,6 +312,78 @@ async function addService() {
   document.getElementById("serviceDuration").
 await loadServices();
 async function loadServices() {
+  const { data: { user }, error: userError } =
+    await supabaseClient.auth.getUser();
+
+  if (userError || !user) return;
+
+  const { data: salon, error: salonError } = await supabaseClient
+    .from("salons")
+    .select("id")
+    .eq("owner_id", user.id)
+    .maybeSingle();
+
+  if (salonError || !salon) return;
+
+  const { data: services, error } = await supabaseClient
+    .from("services")
+    .select("*")
+    .eq("salon_id", salon.id)
+    .order("category")
+    .order("name");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  const list = document.getElementById("servicesList");
+
+  list.innerHTML = "";
+
+  if (!services || services.length === 0) {
+    list.innerHTML = "<p>Još nema dodanih usluga.</p>";
+    return;
+  }
+
+  const groups = {};
+
+  services.forEach(service => {
+    const category = service.category || "Ostalo";
+
+    if (!groups[category]) {
+      groups[category] = [];
+    }
+
+    groups[category].push(service);
+  });
+
+  Object.keys(groups).forEach(category => {
+    const categoryTitle = document.createElement("h3");
+    categoryTitle.textContent = category;
+    categoryTitle.style.marginTop = "24px";
+    categoryTitle.style.color = "#d8ad55";
+
+    list.appendChild(categoryTitle);
+
+    groups[category].forEach(service => {
+      const item = document.createElement("div");
+
+      item.style.background = "#222";
+      item.style.border = "1px solid #333";
+      item.style.borderRadius = "12px";
+      item.style.padding = "14px";
+      item.style.marginBottom = "10px";
+
+      item.innerHTML =
+        "<strong>" + service.name + "</strong><br>" +
+        service.price + " € · " +
+        service.duration_minutes + " min";
+
+      list.appendChild(item);
+    });
+  });
+}
     const { data: { user }, error: userError } =
         await supabaseClient.auth.getUser();
 
