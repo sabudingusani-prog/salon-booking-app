@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prijava salona | Termino</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 22px;
+      padding: 30px 24px;
+    }
+
+    .logo {
+      color: #d8ad55;
+      font-size: 34px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #d8ad55;
+      color: #111;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 18px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .register {
+      text-align: center;
+      margin-top: 22px;
+      color: #aaa;
+    }
+
+    a {
+      color: #d8ad55;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="logo">TERMINO</div>
+
+  <h1>Prijava salona</h1>
+
+  <p class="subtitle">
+    Prijavite se na svoj Termino račun
+  </p>
+
+  <form id="loginForm">
+
+    <label>Email</label>
+    <input
+      id="email"
+      type="email"
+      placeholder="salon@email.com"
+      required
+    >
+
+    <label>Lozinka</label>
+    <input
+      id="password"
+      type="password"
+      placeholder="Vaša lozinka"
+      required
+    >
+
+    <button type="submit">
+      PRIJAVI SE
+    </button>
+
+  </form>
+
+  <div id="message"></div>
+
+  <div class="register">
+    Nemate račun?
+    <a href="register.html">Registrujte salon</a>
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+  const SUPABASE_URL =
+    "https://ykkopljgzdcnfbyutxzo.supabase.co";
+
+  const SUPABASE_KEY =
+    "SUPABASE_KEY = "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  const form =
+    document.getElementById("loginForm");
+
+  const message =
+    document.getElementById("message");
+
+
+  form.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+
+    message.style.color = "white";
+    message.textContent = "Prijavljivanje...";
+
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+
+    if (error) {
+
+      message.style.color = "#ff7373";
+
+      message.textContent =
+        "Greška: " + error.message;
+
+      return;
+    }
+
+
+    message.style.color = "#7ee787";
+
+    message.textContent =
+      "✅ Prijava uspješna!";
+
+  });
+
+</script>
+
+</body>
+</html>
