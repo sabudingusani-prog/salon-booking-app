@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TERMINO | Moj salon</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: 40px auto;
+    }
+
+    .logo {
+      color: #d8ad55;
+      font-size: 38px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #d8ad55;
+      color: #111;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">TERMINO</div>
+
+    <h1>Moj salon</h1>
+    <div class="subtitle">Upravljajte svojim salonom i terminima.</div>
+
+    <div class="card">
+      <h2>📅 Termini</h2>
+      <p>Ovdje ćemo prikazivati rezervacije vaših klijenata.</p>
+    </div>
+
+    <div class="card">
+      <h2>✂️ Usluge</h2>
+      <p>Dodavanje i uređivanje usluga i cijena.</p>
+    </div>
+
+    <div class="card">
+      <h2>🏪 Podaci salona</h2>
+      <p>Uređivanje naziva salona i ostalih podataka.</p>
+    </div>
+
+    <button onclick="logout()">ODJAVI SE</button>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    async function logout() {
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>
