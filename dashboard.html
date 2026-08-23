@@ -88,9 +88,21 @@
     </div>
 
     <div class="card">
-      <h2>🏪 Podaci salona</h2>
-      <p>Uređivanje naziva salona i ostalih podataka.</p>
-    </div>
+  <h2>🏪 Podaci salona</h2>
+
+  <label>Naziv salona</label>
+  <input type="text" id="salonName" placeholder="Naziv salona">
+
+  <label>Adresa</label>
+  <input type="text" id="salonAddress" placeholder="Adresa">
+
+  <label>Telefon</label>
+  <input type="tel" id="salonPhone" placeholder="Broj telefona">
+
+  <button type="button" onclick="saveSalon()">SPREMI PODATKE</button>
+
+  <p id="salonMessage"></p>
+</div>
 
     <button onclick="logout()">ODJAVI SE</button>
 
