@@ -144,6 +144,25 @@
       margin-top: 16px;
     }
 
+    .booking-item {
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .booking-item strong {
+      color: #d8ad55;
+      font-size: 17px;
+    }
+
+    .booking-meta {
+      color: #ccc;
+      margin-top: 4px;
+    }
+
     @media (max-width: 560px) {
       body { padding: 18px; }
       .container { margin: 16px auto; }
@@ -167,7 +186,9 @@
 
     <div class="card">
       <h2>📅 Termini</h2>
-      <p class="muted">Ovdje ćemo prikazivati rezervacije vaših klijenata.</p>
+      <div id="bookingsList">
+        <p class="muted">Učitavanje rezervacija...</p>
+      </div>
     </div>
 
     <div class="card">
@@ -479,11 +500,96 @@
       });
     }
 
+    async function loadBookings() {
+      const list = document.getElementById("bookingsList");
+      list.innerHTML = '<p class="muted">Učitavanje rezervacija...</p>';
+
+      const user = await getCurrentUser();
+      if (!user) return;
+
+      const { data: salon, error: salonError } = await supabaseClient
+        .from("salons")
+        .select("id")
+        .eq("owner_id", user.id)
+        .maybeSingle();
+
+      if (salonError) {
+        console.error("Greška pri učitavanju salona:", salonError);
+        list.innerHTML = '<p class="empty">Greška pri učitavanju salona.</p>';
+        return;
+      }
+
+      if (!salon) {
+        list.innerHTML = '<p class="empty">Prvo spremite podatke salona.</p>';
+        return;
+      }
+
+      const { data: bookings, error } = await supabaseClient
+        .from("bookings")
+        .select(`
+          id,
+          customer_name,
+          customer_email,
+          customer_phone,
+          booking_date,
+          booking_time,
+          status,
+          note,
+          services (
+            name,
+            category,
+            price,
+            duration_minutes
+          )
+        `)
+        .eq("salon_id", salon.id)
+        .order("booking_date", { ascending: true })
+        .order("booking_time", { ascending: true });
+
+      if (error) {
+        console.error("Greška pri učitavanju rezervacija:", error);
+        list.innerHTML = '<p class="empty">Greška pri učitavanju rezervacija.</p>';
+        return;
+      }
+
+      if (!bookings || bookings.length === 0) {
+        list.innerHTML = '<p class="empty">Još nema rezervacija.</p>';
+        return;
+      }
+
+      list.innerHTML = "";
+
+      bookings.forEach(booking => {
+        const item = document.createElement("div");
+        item.className = "booking-item";
+
+        const service = booking.services || {};
+        const serviceName = service.name || "Usluga";
+        const category = service.category ? service.category + " — " : "";
+        const price = service.price !== null && service.price !== undefined
+          ? " · " + Number(service.price).toFixed(2) + " €"
+          : "";
+
+        item.innerHTML = `
+          <strong>${booking.booking_date} u ${String(booking.booking_time).slice(0,5)}</strong>
+          <div class="booking-meta">${category}${serviceName}${price}</div>
+          <div>${booking.customer_name || ""}</div>
+          <div>📞 ${booking.customer_phone || ""}</div>
+          <div>✉️ ${booking.customer_email || ""}</div>
+          ${booking.note ? `<div>📝 ${booking.note}</div>` : ""}
+          <div class="muted">Status: ${booking.status || "pending"}</div>
+        `;
+
+        list.appendChild(item);
+      });
+    }
+
     async function initDashboard() {
       const user = await getCurrentUser();
       if (!user) return;
       await loadSalon();
       await loadServices();
+      await loadBookings();
     }
 
     initDashboard();
