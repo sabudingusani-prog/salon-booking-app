@@ -85,7 +85,21 @@
     <div class="card">
      <div class="card">
   <h2>✂️ Usluge</h2>
-
+<label>Kategorija</label>
+<select id="serviceCategory">
+  <option value="">-- Odaberi kategoriju --</option>
+  <option value="Muski frizer">💈 Muški frizer</option>
+  <option value="Zenski frizer">💇‍♀️ Ženski frizer</option>
+  <option value="Barber">🧔 Barber / Brada</option>
+  <option value="Nokti">💅 Nokti</option>
+  <option value="Manikir">💅 Manikir</option>
+  <option value="Pedikir">🦶 Pedikir</option>
+  <option value="Obrve i trepavice">👁️ Obrve i trepavice</option>
+  <option value="Sminkanje">💄 Šminkanje</option>
+  <option value="Depilacija">✨ Depilacija</option>
+  <option value="Masaza">💆 Masaža</option>
+  <option value="Kozmeticki tretmani">🧴 Kozmetički tretmani</option>
+</select>
   <label>Naziv usluge</label>
   <input type="text" id="serviceName" placeholder="npr. Muško šišanje">
 
@@ -184,8 +198,8 @@ async function addService() {
     const name = document.getElementById("serviceName").value.trim();
     const price = parseFloat(document.getElementById("servicePrice").value);
     const duration = parseInt(document.getElementById("serviceDuration").value);
-
-    if (!name || isNaN(price) || isNaN(duration)) {
+const category = document.getElementById("serviceCategory").value;
+    if (!category || !name || isNaN(price) || isNaN(duration)) {
         message.style.color = "#ff7373";
         message.textContent = "Popunite sva polja za uslugu.";
         return;
@@ -216,6 +230,7 @@ async function addService() {
         .from("services")
         .insert({
             salon_id: salon.id,
+          category: category,
             name: name,
             price: price,
             duration_minutes: duration
