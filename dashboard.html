@@ -250,9 +250,6 @@ const category = document.getElementById("serviceCategory").value;
     document.getElementById("serviceDuration").value = "";
 }
 
-</script>
-</body>
-</html>
 }
   message.textContent = "✅ Podaci salona su async function }
 async function addService() {
@@ -310,7 +307,8 @@ async function addService() {
   document.getElementById("serviceName").value = "";
   document.getElementById("servicePrice").value = "";
   document.getElementById("serviceDuration").
-await loadServices();
+await 
+  }
 async function loadServices() {
   const { data: { user }, error: userError } =
     await supabaseClient.auth.getUser();
