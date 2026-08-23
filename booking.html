@@ -6,9 +6,7 @@
 <title>TERMINO | Rezervacija</title>
 
 <style>
-*{
-box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
 margin:0;
@@ -43,9 +41,7 @@ margin:13px 0 7px;
 font-weight:800;
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
 width:100%;
 padding:14px;
 border-radius:11px;
@@ -125,7 +121,6 @@ padding:14px;
 border-radius:12px;
 background:#222;
 border:1px solid #444;
-word-break:break-all;
 }
 
 .cancelBox a{
@@ -134,11 +129,9 @@ font-weight:800;
 }
 
 @media(max-width:600px){
-
 #timeGrid{
 grid-template-columns:repeat(3,1fr);
 }
-
 }
 </style>
 </head>
@@ -147,106 +140,58 @@ grid-template-columns:repeat(3,1fr);
 
 <div class="wrap">
 
-<div class="logo">
-TERMINO
-</div>
+<div class="logo">TERMINO</div>
 
-<h1>
-Rezerviši termin
-</h1>
+<h1>Rezerviši termin</h1>
 
 <p class="muted">
-🟢 slobodno · 🔴 zauzeto. Klikni samo zeleni termin.
+🟢 slobodno · 🔴 zauzeto
 </p>
 
 <div class="card">
 
-<label>
-Salon
-</label>
+<label>Salon</label>
 
 <select id="salon">
-<option value="">
--- Odaberi salon --
-</option>
+<option value="">-- Odaberi salon --</option>
 </select>
 
-<label>
-Usluga
-</label>
+<label>Usluga</label>
 
 <select id="service" disabled>
-<option value="">
--- Odaberi salon --
-</option>
+<option value="">-- Odaberi salon --</option>
 </select>
 
-<label>
-Datum
-</label>
+<label>Datum</label>
 
 <input id="date" type="date">
 
-<label>
-Termini
-</label>
+<label>Termini</label>
 
 <div id="timeGrid">
-
 <div class="muted">
 Odaberi salon, uslugu i datum.
 </div>
-
 </div>
 
-<input
-id="selectedTime"
-type="hidden"
->
+<input id="selectedTime" type="hidden">
 
 </div>
 
 
 <div class="card">
 
-<label>
-Ime i prezime
-</label>
+<label>Ime i prezime</label>
+<input id="name" type="text" placeholder="Ime i prezime">
 
-<input
-id="name"
-type="text"
-placeholder="Ime i prezime"
->
+<label>Telefon</label>
+<input id="phone" type="tel" placeholder="Broj telefona">
 
-<label>
-Telefon
-</label>
+<label>Email</label>
+<input id="email" type="email" placeholder="Email adresa">
 
-<input
-id="phone"
-type="tel"
-placeholder="Broj telefona"
->
-
-<label>
-Email
-</label>
-
-<input
-id="email"
-type="email"
-placeholder="Email adresa"
->
-
-<label>
-Napomena
-</label>
-
-<textarea
-id="note"
-placeholder="Nije obavezno"
-></textarea>
+<label>Napomena</label>
+<textarea id="note" placeholder="Nije obavezno"></textarea>
 
 <button id="book">
 REZERVIŠI TERMIN
@@ -265,20 +210,17 @@ REZERVIŠI TERMIN
 
 <script>
 
-const db =
-supabase.createClient(
+const db = supabase.createClient(
 "https://ykkopljgzdcnfbyutxzo.supabase.co",
 "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue"
 );
 
-const $ =
-id =>
+const $ = id =>
 document.getElementById(id);
 
 const preselectedSalon =
-new URLSearchParams(
-location.search
-).get("salon");
+new URLSearchParams(location.search)
+.get("salon");
 
 let serviceMap = {};
 
@@ -290,47 +232,21 @@ new Date()
 
 function toMinutes(time){
 
-const parts =
-time.split(":")
-.map(Number);
+const [h,m] =
+time.split(":").map(Number);
 
-return
-parts[0] * 60
-+
-parts[1];
-
-}
-
-
-function formatTime(minutes){
-
-return
-String(
-Math.floor(minutes / 60)
-)
-.padStart(2,"0")
-+
-":"
-+
-String(
-minutes % 60
-)
-.padStart(2,"0");
+return h * 60 + m;
 
 }
 
 
 async function loadSalons(){
 
-const {
-data,
-error
-} =
+const {data,error} =
 await db
 .from("salons")
 .select("id,name")
 .order("name");
-
 
 if(error){
 
@@ -344,9 +260,7 @@ return;
 
 }
 
-
-(data || [])
-.forEach(salon=>{
+(data || []).forEach(salon=>{
 
 const option =
 document.createElement("option");
@@ -361,7 +275,6 @@ $("salon")
 .appendChild(option);
 
 });
-
 
 if(preselectedSalon){
 
@@ -388,9 +301,6 @@ $("service").disabled =
 
 serviceMap = {};
 
-$("selectedTime").value = "";
-
-
 if(!salonId){
 
 $("timeGrid").innerHTML =
@@ -400,11 +310,7 @@ return;
 
 }
 
-
-const {
-data,
-error
-} =
+const {data,error} =
 await db
 .from("services")
 .select(
@@ -417,11 +323,7 @@ salonId
 .order("category")
 .order("name");
 
-
 if(error){
-
-$("msg").style.color =
-"#ff7373";
 
 $("msg").textContent =
 "Greška pri učitavanju usluga.";
@@ -430,9 +332,7 @@ return;
 
 }
 
-
-(data || [])
-.forEach(service=>{
+(data || []).forEach(service=>{
 
 serviceMap[
 service.id
@@ -456,7 +356,6 @@ $("service")
 
 });
 
-
 await loadTimes();
 
 }
@@ -470,17 +369,6 @@ $("timeGrid");
 grid.innerHTML = "";
 
 $("selectedTime").value = "";
-
-
-if(!items.length){
-
-grid.innerHTML =
-'<div class="muted">Nema termina za prikaz.</div>';
-
-return;
-
-}
-
 
 items.forEach(item=>{
 
@@ -515,20 +403,15 @@ item.time;
 button.disabled =
 !item.free;
 
-
 if(item.free){
 
 button.onclick =
 ()=>{
 
 document
-.querySelectorAll(
-".timeBtn"
-)
-.forEach(x=>
-x.classList.remove(
-"selected"
-)
+.querySelectorAll(".timeBtn")
+.forEach(x =>
+x.classList.remove("selected")
 );
 
 button.classList.add(
@@ -542,10 +425,7 @@ item.time;
 
 }
 
-
-grid.appendChild(
-button
-);
+grid.appendChild(button);
 
 });
 
@@ -563,7 +443,6 @@ $("service").value;
 const date =
 $("date").value;
 
-
 if(
 !salonId ||
 !serviceId ||
@@ -573,18 +452,12 @@ if(
 $("timeGrid").innerHTML =
 '<div class="muted">Odaberi salon, uslugu i datum.</div>';
 
-$("selectedTime").value = "";
-
 return;
 
 }
 
-
 const service =
-serviceMap[
-serviceId
-];
-
+serviceMap[serviceId];
 
 if(!service)
 return;
@@ -606,19 +479,13 @@ salonId
 .eq(
 "slot_date",
 date
-)
-.order(
-"slot_time"
 );
 
 
 if(slotError){
 
-$("msg").style.color =
-"#ff7373";
-
 $("msg").textContent =
-"Greška pri učitavanju termina.";
+"Greška pri učitavanju dostupnosti.";
 
 return;
 
@@ -643,9 +510,6 @@ date
 
 if(busyError){
 
-$("msg").style.color =
-"#ff7373";
-
 $("msg").textContent =
 "Greška pri provjeri zauzetih termina.";
 
@@ -655,7 +519,6 @@ return;
 
 
 const availability = {};
-
 
 (slots || [])
 .forEach(slot=>{
@@ -671,8 +534,45 @@ slot.is_available === true;
 });
 
 
-const allTimes = [];
+function overlapsBooking(
+start,
+duration
+){
 
+const end =
+start + duration;
+
+return
+(busyBookings || [])
+.some(booking=>{
+
+const busyStart =
+toMinutes(
+String(
+booking.booking_time
+)
+.slice(0,5)
+);
+
+const busyDuration =
+booking.duration_minutes || 0;
+
+const busyEnd =
+busyStart
++
+busyDuration;
+
+return
+busyStart < end
+&&
+busyEnd > start;
+
+});
+
+}
+
+
+const allTimes = [];
 
 for(
 let hour = 8;
@@ -681,8 +581,7 @@ hour++
 ){
 
 for(
-const minute
-of
+const minute of
 [0,15,30,45]
 ){
 
@@ -692,7 +591,6 @@ hour === 20
 minute > 0
 )
 continue;
-
 
 allTimes.push(
 
@@ -715,102 +613,19 @@ String(minute)
 }
 
 
-function overlapsBooking(
-start,
-duration
-){
-
-const end =
-start
-+
-duration;
-
-
-return
-(busyBookings || [])
-.some(booking=>{
-
-const busyStart =
-toMinutes(
-String(
-booking.booking_time
-)
-.slice(0,5)
-);
-
-
-const busyDuration =
-booking.duration_minutes
-||
-0;
-
-
-const busyEnd =
-busyStart
-+
-busyDuration;
-
-
-return
-busyStart < end
-&&
-busyEnd > start;
-
-});
-
-}
-
-
-const requiredSlots =
-Math.ceil(
-service.duration_minutes
-/
-15
-);
-
-
 const result =
 allTimes.map(time=>{
 
 const start =
 toMinutes(time);
 
-let free = true;
-
-
-for(
-let i = 0;
-i < requiredSlots;
-i++
-){
-
-const neededTime =
-formatTime(
-start
-+
-i * 15
-);
+let free =
+availability[time]
+=== true;
 
 
 if(
-availability[
-neededTime
-]
-!== true
-){
-
-free = false;
-
-break;
-
-}
-
-}
-
-
-if(
-free
-&&
+free &&
 overlapsBooking(
 start,
 service.duration_minutes
@@ -830,9 +645,7 @@ free
 });
 
 
-renderTimes(
-result
-);
+renderTimes(result);
 
 }
 
@@ -862,7 +675,6 @@ $("book")
 .addEventListener(
 "click",
 async()=>{
-
 
 const salonId =
 $("salon").value;
@@ -903,7 +715,7 @@ $("msg").style.color =
 "#ff7373";
 
 $("msg").textContent =
-"Popuni sva polja i izaberi zeleni termin.";
+"Popuni podatke i izaberi zeleni termin.";
 
 return;
 
@@ -1000,9 +812,7 @@ location.pathname.replace(
 +
 "?token="
 +
-encodeURIComponent(
-token
-);
+encodeURIComponent(token);
 
 
 $("cancelInfo").innerHTML =
@@ -1010,7 +820,7 @@ $("cancelInfo").innerHTML =
 <div class="cancelBox">
 
 <strong>
-Sačuvaj link ako želiš kasnije otkazati termin:
+Ako želiš otkazati termin:
 </strong>
 
 <br><br>
