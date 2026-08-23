@@ -113,7 +113,55 @@
   <script>
     async function logout() {
       window.location.href = "login.html";
-    }
+    }const SUPABASE_URL = "https://ykkopljgzdcnfbyutxzo.supabase.co";
+const SUPABASE_KEY = "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
+
+const supabaseClient =
+  window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function saveSalon() {
+  const message = document.getElementById("salonMessage");
+  const name = document.getElementById("salonName").value.trim();
+  const address = document.getElementById("salonAddress").value.trim();
+  const phone = document.getElementById("salonPhone").value.trim();
+
+  const { data: { user }, error: userError } =
+    await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
+    message.style.color = "#ff7373";
+    message.textContent = "Morate biti prijavljeni.";
+    return;
+  }
+
+  const { data: existingSalon } = await supabaseClient
+    .from("salons")
+    .select("id")
+    .eq("owner_id", user.id)
+    .maybeSingle();
+
+  let result;
+
+  if (existingSalon) {
+    result = await supabaseClient
+      .from("salons")
+      .update({ name, address, phone })
+      .eq("owner_id", user.id);
+  } else {
+    result = await supabaseClient
+      .from("salons")
+      .insert({ owner_id: user.id, name, address, phone });
+  }
+
+  if (result.error) {
+    message.style.color = "#ff7373";
+    message.textContent = "Greška: " + result.error.message;
+    return;
+  }
+
+  message.style.color = "#7ee787";
+  message.textContent = "✅ Podaci salona su spremljeni.";
+}
   </script>
 
 </body>
