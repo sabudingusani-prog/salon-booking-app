@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registracija salona</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 22px;
+      padding: 30px 24px;
+    }
+
+    .logo {
+      color: #d8ad55;
+      font-size: 34px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #d8ad55;
+      color: #111;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 18px;
+      text-align: center;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="logo">TERMINO</div>
+
+  <h1>Registracija salona</h1>
+
+  <p class="subtitle">
+    Kreirajte račun za svoj salon
+  </p>
+
+  <form id="registerForm">
+
+    <label>Ime i prezime vlasnika</label>
+    <input id="ownerName" type="text" required>
+
+    <label>Naziv salona</label>
+    <input id="salonName" type="text" required>
+
+    <label>Email</label>
+    <input id="email" type="email" required>
+
+    <label>Lozinka</label>
+    <input id="password" type="password" minlength="6" required>
+
+    <button type="submit">
+      Registruj salon
+    </button>
+
+  </form>
+
+  <div id="message"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://ykkopljgzdcnfbyutxzo.supabase.co";
+
+  const SUPABASE_KEY = "sb_publishable_...tvoj_cijeli_kljuc...";
+
+  const supabaseClient =
+    supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const form = document.getElementById("registerForm");
+  const message = document.getElementById("message");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const ownerName =
+      document.getElementById("ownerName").value.trim();
+
+    const salonName =
+      document.getElementById("salonName").value.trim();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    message.style.color = "white";
+    message.textContent = "Registracija...";
+
+    const { error } = await supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+
+      options: {
+        data: {
+          owner_name: ownerName,
+          salon_name: salonName,
+          account_type: "salon_owner"
+        }
+      }
+    });
+
+    if (error) {
+      message.style.color = "#ff7373";
+      message.textContent = "Greška: " + error.message;
+      return;
+    }
+
+    message.style.color = "#7ee787";
+    message.innerHTML =
+      "✅ Registracija je uspješna.<br>Provjerite email i potvrdite svoj račun.";
+
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
