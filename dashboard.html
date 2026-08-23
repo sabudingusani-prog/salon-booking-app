@@ -294,8 +294,65 @@ async function addService() {
 
   document.getElementById("serviceName").value = "";
   document.getElementById("servicePrice").value = "";
-  document.getElementById("serviceDuration").value = "";
+  document.getElementById("serviceDuration").
+await loadServices();
+async function loadServices() {
+    const { data: { user }, error: userError } =
+        await supabaseClient.auth.getUser();
+
+    if (userError || !user) return;
+
+    const { data: salon, error: salonError } = await supabaseClient
+        .from("salons")
+        .select("id")
+        .eq("owner_id", user.id)
+        .maybeSingle();
+
+    if (salonError || !salon) return;
+
+    const { data: services, error } = await supabaseClient
+        .from("services")
+        .select("*")
+        .eq("salon_id", salon.id);
+
+    if (error) {
+        console.log(error);
+        return;
+    }
+
+    let list = document.getElementById("servicesList");
+
+    if (!list) {
+        list = document.createElement("div");
+        list.id = "servicesList";
+
+        const serviceMessage =
+            document.getElementById("serviceMessage");
+
+        serviceMessage.parentNode.appendChild(list);
+    }
+
+    list.innerHTML = "";
+
+    if (!services || services.length === 0) {
+        list.innerHTML = "<p>Još nema dodanih usluga.</p>";
+        return;
+    }
+
+    services.forEach(service => {
+        const item = document.createElement("div");
+
+        item.innerHTML =
+            "<p><strong>" + service.name + "</strong><br>" +
+            service.price + " € · " +
+            service.duration_minutes + " min</p>";
+
+        list.appendChild(item);
+    });
 }
+
+loadServices();
+
   </script>
 
 </body>
