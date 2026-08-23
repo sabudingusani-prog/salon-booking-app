@@ -6,7 +6,9 @@
 <title>TERMINO | Rezervacija</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
@@ -41,7 +43,9 @@ margin:13px 0 7px;
 font-weight:800;
 }
 
-input,select,textarea{
+input,
+select,
+textarea{
 width:100%;
 padding:14px;
 border-radius:11px;
@@ -101,7 +105,7 @@ border:1px solid #2d7a45;
 background:#441d1d;
 color:#ff9c9c;
 border:1px solid #7e3333;
-opacity:.8;
+opacity:.85;
 }
 
 .selected{
@@ -129,9 +133,11 @@ font-weight:800;
 }
 
 @media(max-width:600px){
+
 #timeGrid{
 grid-template-columns:repeat(3,1fr);
 }
+
 }
 </style>
 </head>
@@ -140,62 +146,119 @@ grid-template-columns:repeat(3,1fr);
 
 <div class="wrap">
 
-<div class="logo">TERMINO</div>
+<div class="logo">
+TERMINO
+</div>
 
-<h1>Rezerviši termin</h1>
+<h1>
+Rezerviši termin
+</h1>
 
 <p class="muted">
 🟢 slobodno · 🔴 zauzeto
 </p>
 
+
 <div class="card">
 
-<label>Salon</label>
+<label>
+Salon
+</label>
 
 <select id="salon">
-<option value="">-- Odaberi salon --</option>
+<option value="">
+-- Odaberi salon --
+</option>
 </select>
 
-<label>Usluga</label>
+
+<label>
+Usluga
+</label>
 
 <select id="service" disabled>
-<option value="">-- Odaberi salon --</option>
+<option value="">
+-- Odaberi salon --
+</option>
 </select>
 
-<label>Datum</label>
+
+<label>
+Datum
+</label>
 
 <input id="date" type="date">
 
-<label>Termini</label>
+
+<label>
+Termini
+</label>
 
 <div id="timeGrid">
+
 <div class="muted">
 Odaberi salon, uslugu i datum.
 </div>
+
 </div>
 
-<input id="selectedTime" type="hidden">
+<input
+id="selectedTime"
+type="hidden"
+>
 
 </div>
 
 
 <div class="card">
 
-<label>Ime i prezime</label>
-<input id="name" type="text" placeholder="Ime i prezime">
+<label>
+Ime i prezime
+</label>
 
-<label>Telefon</label>
-<input id="phone" type="tel" placeholder="Broj telefona">
+<input
+id="name"
+type="text"
+placeholder="Ime i prezime"
+>
 
-<label>Email</label>
-<input id="email" type="email" placeholder="Email adresa">
 
-<label>Napomena</label>
-<textarea id="note" placeholder="Nije obavezno"></textarea>
+<label>
+Telefon
+</label>
+
+<input
+id="phone"
+type="tel"
+placeholder="Broj telefona"
+>
+
+
+<label>
+Email
+</label>
+
+<input
+id="email"
+type="email"
+placeholder="Email adresa"
+>
+
+
+<label>
+Napomena
+</label>
+
+<textarea
+id="note"
+placeholder="Nije obavezno"
+></textarea>
+
 
 <button id="book">
 REZERVIŠI TERMIN
 </button>
+
 
 <div id="msg"></div>
 
@@ -210,19 +273,25 @@ REZERVIŠI TERMIN
 
 <script>
 
-const db = supabase.createClient(
+const db =
+supabase.createClient(
 "https://ykkopljgzdcnfbyutxzo.supabase.co",
 "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue"
 );
 
-const $ = id =>
+const $ =
+id =>
 document.getElementById(id);
 
+
 const preselectedSalon =
-new URLSearchParams(location.search)
-.get("salon");
+new URLSearchParams(
+location.search
+).get("salon");
+
 
 let serviceMap = {};
+
 
 $("date").min =
 new Date()
@@ -233,20 +302,39 @@ new Date()
 function toMinutes(time){
 
 const [h,m] =
-time.split(":").map(Number);
+time
+.split(":")
+.map(Number);
 
-return h * 60 + m;
+return
+h * 60
++
+m;
+
+}
+
+
+function sleep(ms){
+
+return new Promise(
+resolve =>
+setTimeout(resolve,ms)
+);
 
 }
 
 
 async function loadSalons(){
 
-const {data,error} =
+const {
+data,
+error
+} =
 await db
 .from("salons")
 .select("id,name")
 .order("name");
+
 
 if(error){
 
@@ -260,7 +348,9 @@ return;
 
 }
 
-(data || []).forEach(salon=>{
+
+(data || [])
+.forEach(salon=>{
 
 const option =
 document.createElement("option");
@@ -275,6 +365,7 @@ $("salon")
 .appendChild(option);
 
 });
+
 
 if(preselectedSalon){
 
@@ -293,13 +384,17 @@ async function loadServices(){
 const salonId =
 $("salon").value;
 
+
 $("service").innerHTML =
 '<option value="">-- Odaberi uslugu --</option>';
+
 
 $("service").disabled =
 !salonId;
 
+
 serviceMap = {};
+
 
 if(!salonId){
 
@@ -310,7 +405,11 @@ return;
 
 }
 
-const {data,error} =
+
+const {
+data,
+error
+} =
 await db
 .from("services")
 .select(
@@ -323,7 +422,11 @@ salonId
 .order("category")
 .order("name");
 
+
 if(error){
+
+$("msg").style.color =
+"#ff7373";
 
 $("msg").textContent =
 "Greška pri učitavanju usluga.";
@@ -332,18 +435,23 @@ return;
 
 }
 
-(data || []).forEach(service=>{
+
+(data || [])
+.forEach(service=>{
 
 serviceMap[
 service.id
 ] =
 service;
 
+
 const option =
 document.createElement("option");
 
+
 option.value =
 service.id;
+
 
 option.textContent =
 `${service.category || ""}
@@ -351,10 +459,12 @@ option.textContent =
 — ${service.price} €
 — ${service.duration_minutes} min`;
 
+
 $("service")
 .appendChild(option);
 
 });
+
 
 await loadTimes();
 
@@ -366,17 +476,25 @@ function renderTimes(items){
 const grid =
 $("timeGrid");
 
+
 grid.innerHTML = "";
 
 $("selectedTime").value = "";
+
 
 items.forEach(item=>{
 
 const button =
 document.createElement("button");
 
+
 button.type =
 "button";
+
+
+button.dataset.time =
+item.time;
+
 
 button.className =
 "timeBtn "
@@ -389,6 +507,7 @@ item.free
 "busy"
 );
 
+
 button.textContent =
 (
 item.free
@@ -400,8 +519,10 @@ item.free
 +
 item.time;
 
+
 button.disabled =
 !item.free;
+
 
 if(item.free){
 
@@ -409,14 +530,20 @@ button.onclick =
 ()=>{
 
 document
-.querySelectorAll(".timeBtn")
-.forEach(x =>
-x.classList.remove("selected")
+.querySelectorAll(
+".timeBtn"
+)
+.forEach(x=>
+x.classList.remove(
+"selected"
+)
 );
+
 
 button.classList.add(
 "selected"
 );
+
 
 $("selectedTime").value =
 item.time;
@@ -425,7 +552,10 @@ item.time;
 
 }
 
-grid.appendChild(button);
+
+grid.appendChild(
+button
+);
 
 });
 
@@ -443,6 +573,7 @@ $("service").value;
 const date =
 $("date").value;
 
+
 if(
 !salonId ||
 !serviceId ||
@@ -452,12 +583,18 @@ if(
 $("timeGrid").innerHTML =
 '<div class="muted">Odaberi salon, uslugu i datum.</div>';
 
+$("selectedTime").value = "";
+
 return;
 
 }
 
+
 const service =
-serviceMap[serviceId];
+serviceMap[
+serviceId
+];
+
 
 if(!service)
 return;
@@ -468,7 +605,9 @@ data:slots,
 error:slotError
 } =
 await db
-.from("availability_slots")
+.from(
+"availability_slots"
+)
 .select(
 "slot_time,is_available"
 )
@@ -483,6 +622,9 @@ date
 
 
 if(slotError){
+
+$("msg").style.color =
+"#ff7373";
 
 $("msg").textContent =
 "Greška pri učitavanju dostupnosti.";
@@ -499,16 +641,21 @@ error:busyError
 await db.rpc(
 "get_busy_bookings",
 {
+
 p_salon_id:
 salonId,
 
 p_booking_date:
 date
+
 }
 );
 
 
 if(busyError){
+
+$("msg").style.color =
+"#ff7373";
 
 $("msg").textContent =
 "Greška pri provjeri zauzetih termina.";
@@ -519,6 +666,7 @@ return;
 
 
 const availability = {};
+
 
 (slots || [])
 .forEach(slot=>{
@@ -542,6 +690,7 @@ duration
 const end =
 start + duration;
 
+
 return
 (busyBookings || [])
 .some(booking=>{
@@ -554,13 +703,18 @@ booking.booking_time
 .slice(0,5)
 );
 
+
 const busyDuration =
-booking.duration_minutes || 0;
+booking.duration_minutes
+||
+0;
+
 
 const busyEnd =
 busyStart
 +
 busyDuration;
+
 
 return
 busyStart < end
@@ -574,6 +728,7 @@ busyEnd > start;
 
 const allTimes = [];
 
+
 for(
 let hour = 8;
 hour <= 20;
@@ -581,7 +736,8 @@ hour++
 ){
 
 for(
-const minute of
+const minute
+of
 [0,15,30,45]
 ){
 
@@ -591,6 +747,7 @@ hour === 20
 minute > 0
 )
 continue;
+
 
 allTimes.push(
 
@@ -619,13 +776,17 @@ allTimes.map(time=>{
 const start =
 toMinutes(time);
 
+
 let free =
-availability[time]
+availability[
+time
+]
 === true;
 
 
 if(
-free &&
+free
+&&
 overlapsBooking(
 start,
 service.duration_minutes
@@ -645,7 +806,81 @@ free
 });
 
 
-renderTimes(result);
+renderTimes(
+result
+);
+
+}
+
+
+function makeReservedTimeRed(
+bookingTime,
+duration
+){
+
+const bookingStart =
+toMinutes(
+bookingTime
+);
+
+
+const bookingEnd =
+bookingStart
++
+duration;
+
+
+document
+.querySelectorAll(
+".timeBtn"
+)
+.forEach(button=>{
+
+const time =
+button.dataset.time;
+
+
+if(!time)
+return;
+
+
+const start =
+toMinutes(time);
+
+
+if(
+start >= bookingStart
+&&
+start < bookingEnd
+){
+
+button.classList.remove(
+"free",
+"selected"
+);
+
+
+button.classList.add(
+"busy"
+);
+
+
+button.textContent =
+"🔴 "
++
+time;
+
+
+button.disabled =
+true;
+
+}
+
+});
+
+
+$("selectedTime").value =
+"";
 
 }
 
@@ -675,6 +910,7 @@ $("book")
 .addEventListener(
 "click",
 async()=>{
+
 
 const salonId =
 $("salon").value;
@@ -722,8 +958,15 @@ return;
 }
 
 
+const selectedService =
+serviceMap[
+serviceId
+];
+
+
 $("book").disabled =
 true;
+
 
 $("book").textContent =
 "PROVJERA...";
@@ -768,6 +1011,7 @@ note || null
 $("book").disabled =
 false;
 
+
 $("book").textContent =
 "REZERVIŠI TERMIN";
 
@@ -777,12 +1021,15 @@ if(error){
 $("msg").style.color =
 "#ff7373";
 
+
 $("msg").textContent =
 "⛔ "
 +
 error.message;
 
+
 await loadTimes();
+
 
 return;
 
@@ -792,8 +1039,17 @@ return;
 $("msg").style.color =
 "#7ee787";
 
+
 $("msg").textContent =
 "✅ Termin je uspješno rezervisan.";
+
+
+/* ODMAH PRETVORI TERMIN U CRVENO */
+
+makeReservedTimeRed(
+bookingTime,
+selectedService.duration_minutes
+);
 
 
 const token =
@@ -812,7 +1068,9 @@ location.pathname.replace(
 +
 "?token="
 +
-encodeURIComponent(token);
+encodeURIComponent(
+token
+);
 
 
 $("cancelInfo").innerHTML =
@@ -834,6 +1092,10 @@ OTKAŽI MOJ TERMIN
 
 }
 
+
+/* PONOVO UČITAJ IZ BAZE DA OSTANE CRVENO */
+
+await sleep(300);
 
 await loadTimes();
 
