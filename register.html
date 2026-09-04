@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registracija salona</title>
+  <title>Registracija salona | Termino</title>
 
   <style>
     * {
@@ -52,7 +52,8 @@
 
     label {
       display: block;
-      margin: 15px 0 7px;
+      margin: 14px 0 7px;
+      font-size: 14px;
     }
 
     input {
@@ -60,7 +61,7 @@
       padding: 14px;
       border-radius: 10px;
       border: 1px solid #444;
-      background: #222;
+      background: #0d0d0d;
       color: white;
       font-size: 16px;
     }
@@ -73,7 +74,7 @@
       border-radius: 10px;
       background: #d8ad55;
       color: #111;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -83,100 +84,166 @@
       text-align: center;
       line-height: 1.5;
     }
+
+    a {
+      color: #d8ad55;
+    }
+
+    .back {
+      text-align: center;
+      margin-top: 22px;
+    }
   </style>
 </head>
 
 <body>
 
-<div class="card">
-  <div class="logo">TERMINO</div>
+  <div class="card">
+    <div class="logo">TERMINO</div>
 
-  <h1>Registracija salona</h1>
+    <h1>Registrujte svoj salon</h1>
 
-  <p class="subtitle">
-    Kreirajte račun za svoj salon
-  </p>
+    <div class="subtitle">
+      Napravite račun i počnite primati online rezervacije.
+    </div>
 
-  <form id="registerForm">
+    <form id="registerForm">
 
-    <label>Ime i prezime vlasnika</label>
-    <input id="ownerName" type="text" required>
+      <label>Ime i prezime vlasnika</label>
+      <input
+        id="ownerName"
+        type="text"
+        placeholder="Vaše ime i prezime"
+        required
+      >
 
-    <label>Naziv salona</label>
-    <input id="salonName" type="text" required>
+      <label>Naziv salona</label>
+      <input
+        id="salonName"
+        type="text"
+        placeholder="Naziv salona"
+        required
+      >
 
-    <label>Email</label>
-    <input id="email" type="email" required>
+      <label>Email</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="salon@email.com"
+        required
+      >
 
-    <label>Lozinka</label>
-    <input id="password" type="password" minlength="6" required>
+      <label>Lozinka</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="Najmanje 6 znakova"
+        minlength="6"
+        required
+      >
 
-    <button type="submit">
-      Registruj salon
-    </button>
+      <button type="submit">
+        REGISTRUJ SALON
+      </button>
 
-  </form>
+    </form>
 
-  <div id="message"></div>
-</div>
+    <div id="message"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div class="back">
+      <a href="index.html">← Nazad na početnu</a>
+    </div>
+  </div>
 
-<script>
-  const SUPABASE_URL = "https://ykkopljgzdcnfbyutxzo.supabase.co";
 
-  const SUPABASE_KEY = "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  const supabaseClient =
-    supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <script>
+    const SUPABASE_URL =
+      "https://ykkopljgzdcnfbyutxzo.supabase.co";
 
-  const form = document.getElementById("registerForm");
-  const message = document.getElementById("message");
+    const SUPABASE_KEY =
+      "sb_publishable_g0DyVw3GMFgrjZHwSeuvkQ_6x54CKue";
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
-    const ownerName =
-      document.getElementById("ownerName").value.trim();
 
-    const salonName =
-      document.getElementById("salonName").value.trim();
+    const form =
+      document.getElementById("registerForm");
 
-    const email =
-      document.getElementById("email").value.trim();
+    const message =
+      document.getElementById("message");
 
-    const password =
-      document.getElementById("password").value;
 
-    message.style.color = "white";
-    message.textContent = "Registracija...";
+    form.addEventListener("submit", async (event) => {
 
-    const { error } = await supabaseClient.auth.signUp({
-      email: email,
-      password: password,
+      event.preventDefault();
 
-      options: {
-        data: {
-          owner_name: ownerName,
-          salon_name: salonName,
-          account_type: "salon_owner"
-        }
+      message.textContent =
+        "Kreiranje računa...";
+
+
+      const ownerName =
+        document.getElementById("ownerName").value.trim();
+
+      const salonName =
+        document.getElementById("salonName").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+
+      const { data, error } =
+        await supabaseClient.auth.signUp({
+
+          email: email,
+
+          password: password,
+
+          options: {
+
+            emailRedirectTo:
+              "https://sabudingusani-prog.github.io/salon-booking-app/register.html",
+
+            data: {
+              owner_name: ownerName,
+              salon_name: salonName,
+              account_type: "salon_owner"
+            }
+
+          }
+
+        });
+
+
+      if (error) {
+
+        message.style.color = "#ff7373";
+
+        message.textContent =
+          "Greška: " + error.message;
+
+        return;
       }
+
+
+      message.style.color = "#7ee787";
+
+      message.innerHTML =
+        "✅ Registracija je uspješna.<br>" +
+        "Provjerite email i potvrdite svoj račun.";
+
+      form.reset();
+
     });
-
-    if (error) {
-      message.style.color = "#ff7373";
-      message.textContent = "Greška: " + error.message;
-      return;
-    }
-
-    message.style.color = "#7ee787";
-    message.innerHTML =
-      "✅ Registracija je uspješna.<br>Provjerite email i potvrdite svoj račun.";
-
-    form.reset();
-  });
-</script>
+  </script>
 
 </body>
 </html>
